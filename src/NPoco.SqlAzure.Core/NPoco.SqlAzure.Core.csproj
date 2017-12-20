@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionPrefix>2.0.0-beta</VersionPrefix>
+    <TargetFrameworks>netstandard1.5;net46;net461;net45</TargetFrameworks>
+    <AssemblyName>NPoco.SqlAzure.Core</AssemblyName>
+    <PackageId>NPoco.SqlAzure.Core</PackageId>
+    <PackageTags>azure;sql;sqlazure;npoco;transient;fault</PackageTags>
+    <PackageProjectUrl>https://github.com/davidsavagejr/NPoco.SqlAzure</PackageProjectUrl>
+    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.5' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CoreCompat.EnterpriseLibrary.TransientFaultHandling" Version="6.0.1304-r3" />
+    <PackageReference Include="NPoco" Version="3.9.2" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+</Project>

@@ -667,5 +667,50 @@ namespace NPoco.SqlAzure
         {
             return RetryPolicy.ExecuteAction(() => InternalDb.IsNew(poco));
         }
+
+        public Task<int> UpdateAsync<T>(T poco, Expression<Func<T, object>> fields)
+        {
+            return RetryPolicy.ExecuteAsync(() => InternalDb.UpdateAsync<T>(poco, fields));
+        }
+
+        public Task<T> SingleAsync<T>(string sql, params object[] args)
+        {
+            return RetryPolicy.ExecuteAsync(() => InternalDb.SingleAsync<T>(sql, args));
+        }
+
+        public Task<T> SingleAsync<T>(Sql sql)
+        {
+            return RetryPolicy.ExecuteAsync(() => InternalDb.SingleAsync<T>(sql));
+        }
+
+        public Task<T> SingleOrDefaultAsync<T>(string sql, params object[] args)
+        {
+            return RetryPolicy.ExecuteAsync(() => InternalDb.SingleOrDefaultAsync<T>(sql, args));
+        }
+
+        public Task<T> SingleOrDefaultAsync<T>(Sql sql)
+        {
+            return RetryPolicy.ExecuteAsync(() => InternalDb.SingleOrDefaultAsync<T>(sql));
+        }
+
+        public Task<T> FirstAsync<T>(string sql, params object[] args)
+        {
+            return RetryPolicy.ExecuteAsync(() => InternalDb.FirstAsync<T>(sql, args));
+        }
+
+        public Task<T> FirstAsync<T>(Sql sql)
+        {
+            return RetryPolicy.ExecuteAsync(() => InternalDb.FirstAsync<T>(sql));
+        }
+
+        public Task<T> FirstOrDefaultAsync<T>(string sql, params object[] args)
+        {
+            return RetryPolicy.ExecuteAsync(() => InternalDb.FirstOrDefaultAsync<T>(sql, args));
+        }
+
+        public Task<T> FirstOrDefaultAsync<T>(Sql sql)
+        {
+            return RetryPolicy.ExecuteAsync(() => InternalDb.FirstOrDefaultAsync<T>(sql));
+        }
     }
 }
