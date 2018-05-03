@@ -20,8 +20,8 @@ namespace NPoco.SqlAzure
                         {
                             case 40501:
                                 ThrottlingCondition throttlingCondition = ThrottlingCondition.FromError(error);
-                                sqlException.Data[(object)throttlingCondition.ThrottlingMode.GetType().Name] = (object)throttlingCondition.ThrottlingMode.ToString();
-                                sqlException.Data[(object)throttlingCondition.GetType().Name] = (object)throttlingCondition;
+                                sqlException.Data[throttlingCondition.ThrottlingMode.GetType().Name] = throttlingCondition.ThrottlingMode.ToString();
+                                sqlException.Data[throttlingCondition.GetType().Name] = throttlingCondition;
                                 return true;
                             case 40540:
                             case 40613:

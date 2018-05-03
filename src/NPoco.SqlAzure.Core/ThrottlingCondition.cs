@@ -21,9 +21,7 @@ namespace NPoco.SqlAzure
         /// Maintains a collection of key/value pairs where a key is the resource type and a value is the type of throttling applied to the given resource type.
         /// 
         /// </summary>
-        private readonly IList<Tuple<ThrottledResourceType, ThrottlingType>> throttledResources =
-            (IList<Tuple<ThrottledResourceType, ThrottlingType>>)
-                new List<Tuple<ThrottledResourceType, ThrottlingType>>(9);
+        private readonly IList<Tuple<ThrottledResourceType, ThrottlingType>> throttledResources = new List<Tuple<ThrottledResourceType, ThrottlingType>>(9);
 
         /// <summary>
         /// Gets the error number that corresponds to the throttling conditions reported by SQL Database.
@@ -44,7 +42,7 @@ namespace NPoco.SqlAzure
                     ThrottlingMode = ThrottlingMode.Unknown
                 };
                 throttlingCondition.throttledResources.Add(
-                    Tuple.Create<ThrottledResourceType, ThrottlingType>(ThrottledResourceType.Unknown,
+                    Tuple.Create(ThrottledResourceType.Unknown,
                         ThrottlingType.Unknown));
                 return throttlingCondition;
             }
@@ -60,138 +58,54 @@ namespace NPoco.SqlAzure
         /// Gets a list of the resources in the SQL Database that were subject to throttling conditions.
         /// 
         /// </summary>
-        public IEnumerable<Tuple<ThrottledResourceType, ThrottlingType>> ThrottledResources
-        {
-            get { return (IEnumerable<Tuple<ThrottledResourceType, ThrottlingType>>) this.throttledResources; }
-        }
+        public IEnumerable<Tuple<ThrottledResourceType, ThrottlingType>> ThrottledResources => throttledResources;
 
         /// <summary>
         /// Gets a value that indicates whether physical data file space throttling was reported by SQL Database.
         /// 
         /// </summary>
-        public bool IsThrottledOnDataSpace
-        {
-            get
-            {
-                return
-                    Enumerable.Any<Tuple<ThrottledResourceType, ThrottlingType>>(
-                        Enumerable.Where<Tuple<ThrottledResourceType, ThrottlingType>>(
-                            (IEnumerable<Tuple<ThrottledResourceType, ThrottlingType>>) this.throttledResources,
-                            (Func<Tuple<ThrottledResourceType, ThrottlingType>, bool>)
-                                (x => x.Item1 == ThrottledResourceType.PhysicalDatabaseSpace)));
-            }
-        }
+        public bool IsThrottledOnDataSpace => throttledResources.Any(x => x.Item1 == ThrottledResourceType.PhysicalDatabaseSpace);
 
         /// <summary>
         /// Gets a value that indicates whether physical log space throttling was reported by SQL Database.
         /// 
         /// </summary>
-        public bool IsThrottledOnLogSpace
-        {
-            get
-            {
-                return
-                    Enumerable.Any<Tuple<ThrottledResourceType, ThrottlingType>>(
-                        Enumerable.Where<Tuple<ThrottledResourceType, ThrottlingType>>(
-                            (IEnumerable<Tuple<ThrottledResourceType, ThrottlingType>>) this.throttledResources,
-                            (Func<Tuple<ThrottledResourceType, ThrottlingType>, bool>)
-                                (x => x.Item1 == ThrottledResourceType.PhysicalLogSpace)));
-            }
-        }
+        public bool IsThrottledOnLogSpace => throttledResources.Any(x => x.Item1 == ThrottledResourceType.PhysicalLogSpace);
 
         /// <summary>
         /// Gets a value that indicates whether transaction activity throttling was reported by SQL Database.
         /// 
         /// </summary>
-        public bool IsThrottledOnLogWrite
-        {
-            get
-            {
-                return
-                    Enumerable.Any<Tuple<ThrottledResourceType, ThrottlingType>>(
-                        Enumerable.Where<Tuple<ThrottledResourceType, ThrottlingType>>(
-                            (IEnumerable<Tuple<ThrottledResourceType, ThrottlingType>>) this.throttledResources,
-                            (Func<Tuple<ThrottledResourceType, ThrottlingType>, bool>)
-                                (x => x.Item1 == ThrottledResourceType.LogWriteIoDelay)));
-            }
-        }
-
+        public bool IsThrottledOnLogWrite => throttledResources.Any(x => x.Item1 == ThrottledResourceType.LogWriteIoDelay);
         /// <summary>
         /// Gets a value that indicates whether data read activity throttling was reported by SQL Database.
         /// 
         /// </summary>
-        public bool IsThrottledOnDataRead
-        {
-            get
-            {
-                return
-                    Enumerable.Any<Tuple<ThrottledResourceType, ThrottlingType>>(
-                        Enumerable.Where<Tuple<ThrottledResourceType, ThrottlingType>>(
-                            (IEnumerable<Tuple<ThrottledResourceType, ThrottlingType>>) this.throttledResources,
-                            (Func<Tuple<ThrottledResourceType, ThrottlingType>, bool>)
-                                (x => x.Item1 == ThrottledResourceType.DataReadIoDelay)));
-            }
-        }
+        public bool IsThrottledOnDataRead => throttledResources.Any(x => x.Item1 == ThrottledResourceType.DataReadIoDelay);
 
         /// <summary>
         /// Gets a value that indicates whether CPU throttling was reported by SQL Database.
         /// 
         /// </summary>
-        public bool IsThrottledOnCpu
-        {
-            get
-            {
-                return
-                    Enumerable.Any<Tuple<ThrottledResourceType, ThrottlingType>>(
-                        Enumerable.Where<Tuple<ThrottledResourceType, ThrottlingType>>(
-                            (IEnumerable<Tuple<ThrottledResourceType, ThrottlingType>>) this.throttledResources,
-                            (Func<Tuple<ThrottledResourceType, ThrottlingType>, bool>)
-                                (x => x.Item1 == ThrottledResourceType.Cpu)));
-            }
-        }
+        public bool IsThrottledOnCpu => throttledResources.Any(x => x.Item1 == ThrottledResourceType.Cpu);
 
         /// <summary>
         /// Gets a value that indicates whether database size throttling was reported by SQL Database.
         /// 
         /// </summary>
-        public bool IsThrottledOnDatabaseSize
-        {
-            get
-            {
-                return
-                    Enumerable.Any<Tuple<ThrottledResourceType, ThrottlingType>>(
-                        Enumerable.Where<Tuple<ThrottledResourceType, ThrottlingType>>(
-                            (IEnumerable<Tuple<ThrottledResourceType, ThrottlingType>>) this.throttledResources,
-                            (Func<Tuple<ThrottledResourceType, ThrottlingType>, bool>)
-                                (x => x.Item1 == ThrottledResourceType.DatabaseSize)));
-            }
-        }
+        public bool IsThrottledOnDatabaseSize => throttledResources.Any(x => x.Item1 == ThrottledResourceType.DatabaseSize);
 
         /// <summary>
         /// Gets a value that indicates whether concurrent requests throttling was reported by SQL Database.
         /// 
         /// </summary>
-        public bool IsThrottledOnWorkerThreads
-        {
-            get
-            {
-                return
-                    Enumerable.Any<Tuple<ThrottledResourceType, ThrottlingType>>(
-                        Enumerable.Where<Tuple<ThrottledResourceType, ThrottlingType>>(
-                            (IEnumerable<Tuple<ThrottledResourceType, ThrottlingType>>) this.throttledResources,
-                            (Func<Tuple<ThrottledResourceType, ThrottlingType>, bool>)
-                                (x => x.Item1 == ThrottledResourceType.WorkerThreads)));
-            }
-        }
+        public bool IsThrottledOnWorkerThreads => throttledResources.Any(x => x.Item1 == ThrottledResourceType.WorkerThreads);
 
         /// <summary>
         /// Gets a value that indicates whether throttling conditions were not determined with certainty.
         /// 
         /// </summary>
-        public bool IsUnknown
-        {
-            get { return this.ThrottlingMode == ThrottlingMode.Unknown; }
-        }
+        public bool IsUnknown => ThrottlingMode == ThrottlingMode.Unknown;
 
         /// <summary>
         /// Determines throttling conditions from the specified SQL exception.
@@ -208,10 +122,10 @@ namespace NPoco.SqlAzure
                 foreach (SqlError error in ex.Errors)
                 {
                     if (error.Number == 40501)
-                        return ThrottlingCondition.FromError(error);
+                        return FromError(error);
                 }
             }
-            return ThrottlingCondition.Unknown;
+            return Unknown;
         }
 
         /// <summary>
@@ -226,12 +140,11 @@ namespace NPoco.SqlAzure
         {
             if (error != null)
             {
-                Match match = ThrottlingCondition.sqlErrorCodeRegEx.Match(error.Message);
-                int result;
-                if (match.Success && int.TryParse(match.Groups[1].Value, out result))
-                    return ThrottlingCondition.FromReasonCode(result);
+                Match match = sqlErrorCodeRegEx.Match(error.Message);
+                if (match.Success && int.TryParse(match.Groups[1].Value, out var result))
+                    return FromReasonCode(result);
             }
-            return ThrottlingCondition.Unknown;
+            return Unknown;
         }
 
         /// <summary>
@@ -245,7 +158,7 @@ namespace NPoco.SqlAzure
         public static ThrottlingCondition FromReasonCode(int reasonCode)
         {
             if (reasonCode <= 0)
-                return ThrottlingCondition.Unknown;
+                return Unknown;
             ThrottlingMode throttlingMode = (ThrottlingMode) (reasonCode & 3);
             ThrottlingCondition throttlingCondition = new ThrottlingCondition()
             {
@@ -253,38 +166,38 @@ namespace NPoco.SqlAzure
             };
             int num1 = reasonCode >> 8;
             throttlingCondition.throttledResources.Add(
-                Tuple.Create<ThrottledResourceType, ThrottlingType>(ThrottledResourceType.PhysicalDatabaseSpace,
+                Tuple.Create(ThrottledResourceType.PhysicalDatabaseSpace,
                     (ThrottlingType) (num1 & 3)));
             int num2;
             throttlingCondition.throttledResources.Add(
-                Tuple.Create<ThrottledResourceType, ThrottlingType>(ThrottledResourceType.PhysicalLogSpace,
+                Tuple.Create(ThrottledResourceType.PhysicalLogSpace,
                     (ThrottlingType) ((num2 = num1 >> 2) & 3)));
             int num3;
             throttlingCondition.throttledResources.Add(
-                Tuple.Create<ThrottledResourceType, ThrottlingType>(ThrottledResourceType.LogWriteIoDelay,
+                Tuple.Create(ThrottledResourceType.LogWriteIoDelay,
                     (ThrottlingType) ((num3 = num2 >> 2) & 3)));
             int num4;
             throttlingCondition.throttledResources.Add(
-                Tuple.Create<ThrottledResourceType, ThrottlingType>(ThrottledResourceType.DataReadIoDelay,
+                Tuple.Create(ThrottledResourceType.DataReadIoDelay,
                     (ThrottlingType) ((num4 = num3 >> 2) & 3)));
             int num5;
             throttlingCondition.throttledResources.Add(
-                Tuple.Create<ThrottledResourceType, ThrottlingType>(ThrottledResourceType.Cpu,
+                Tuple.Create(ThrottledResourceType.Cpu,
                     (ThrottlingType) ((num5 = num4 >> 2) & 3)));
             int num6;
             throttlingCondition.throttledResources.Add(
-                Tuple.Create<ThrottledResourceType, ThrottlingType>(ThrottledResourceType.DatabaseSize,
+                Tuple.Create(ThrottledResourceType.DatabaseSize,
                     (ThrottlingType) ((num6 = num5 >> 2) & 3)));
             int num7;
             throttlingCondition.throttledResources.Add(
-                Tuple.Create<ThrottledResourceType, ThrottlingType>(ThrottledResourceType.Internal,
+                Tuple.Create(ThrottledResourceType.Internal,
                     (ThrottlingType) ((num7 = num6 >> 2) & 3)));
             int num8;
             throttlingCondition.throttledResources.Add(
-                Tuple.Create<ThrottledResourceType, ThrottlingType>(ThrottledResourceType.WorkerThreads,
+                Tuple.Create(ThrottledResourceType.WorkerThreads,
                     (ThrottlingType) ((num8 = num7 >> 2) & 3)));
             throttlingCondition.throttledResources.Add(
-                Tuple.Create<ThrottledResourceType, ThrottlingType>(ThrottledResourceType.Internal,
+                Tuple.Create(ThrottledResourceType.Internal,
                     (ThrottlingType) (num8 >> 2 & 3)));
             return throttlingCondition;
         }
@@ -300,27 +213,18 @@ namespace NPoco.SqlAzure
         public override string ToString()
         {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendFormat((IFormatProvider) CultureInfo.CurrentCulture, "Mode: {0} | ", new object[1]
+            stringBuilder.AppendFormat(CultureInfo.CurrentCulture, "Mode: {0} | ", new object[]
             {
-                (object) this.ThrottlingMode
+                ThrottlingMode
             });
             string[] strArray =
-                Enumerable.ToArray<string>(
-                    (IEnumerable<string>)
-                        Enumerable.OrderBy<string, string>(
-                            Enumerable.Select<Tuple<ThrottledResourceType, ThrottlingType>, string>(
-                                Enumerable.Where<Tuple<ThrottledResourceType, ThrottlingType>>(
-                                    (IEnumerable<Tuple<ThrottledResourceType, ThrottlingType>>) this.throttledResources,
-                                    (Func<Tuple<ThrottledResourceType, ThrottlingType>, bool>)
-                                        (x => x.Item1 != ThrottledResourceType.Internal)),
-                                (Func<Tuple<ThrottledResourceType, ThrottlingType>, string>)
-                                    (x =>
-                                        string.Format((IFormatProvider) CultureInfo.CurrentCulture, "{0}: {1}",
-                                            new object[2]
-                                            {
-                                                (object) x.Item1,
-                                                (object) x.Item2
-                                            }))), (Func<string, string>) (x => x)));
+                throttledResources.Where(x => x.Item1 != ThrottledResourceType.Internal).Select(x =>
+                                                                                                         string.Format(CultureInfo.CurrentCulture, "{0}: {1}",
+                                                                                                                       new object[]
+                                                                                                                       {
+                                                                                                                           x.Item1,
+                                                                                                                           x.Item2
+                                                                                                                       })).OrderBy(x => x).ToArray();
             stringBuilder.Append(string.Join(", ", strArray));
             return stringBuilder.ToString();
         }
